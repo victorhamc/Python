@@ -1,4 +1,4 @@
-def encode_base64(text):
+def encode_base64(text: str) -> str:
     r"""
     >>> encode_base64('WELCOME to base64 encoding 😁')
     'V0VMQ09NRSB0byBiYXNlNjQgZW5jb2Rpbmcg8J+YgQ=='
@@ -33,13 +33,14 @@ def encode_base64(text):
     return r[0 : len(r) - len(p)] + p
 
 
-def decode_base64(text):
+def decode_base64(text: str) -> str:
     r"""
     >>> decode_base64('V0VMQ09NRSB0byBiYXNlNjQgZW5jb2Rpbmcg8J+YgQ==')
     'WELCOME to base64 encoding 😁'
     >>> decode_base64('QcOF4ZCD8JCAj/CfpJM=')
     'AÅᐃ𐀏🤓'
-    >>> decode_base64("QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB\r\nQUFB")
+    >>> decode_base64("QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUF"
+    ...               "BQUFBQUFBQUFB\r\nQUFB")
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
     """
     base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"

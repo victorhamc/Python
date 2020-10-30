@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Author: João Gustavo A. Amorim & Gabriel Kunz
 # Author email: joaogustavoamorim@gmail.com and gabriel-kunz@uergs.edu.br
 # Coding date:  apr 2019
@@ -6,13 +5,13 @@
 
 """
     * This code implement the Hamming code:
-        https://en.wikipedia.org/wiki/Hamming_code - In telecommunication, 
+        https://en.wikipedia.org/wiki/Hamming_code - In telecommunication,
     Hamming codes are a family of linear error-correcting codes. Hamming
-    codes can detect up to two-bit errors or correct one-bit errors 
-    without detection of uncorrected errors. By contrast, the simple 
-    parity code cannot correct errors, and can detect only an odd number 
-    of bits in error. Hamming codes are perfect codes, that is, they 
-    achieve the highest possible rate for codes with their block length 
+    codes can detect up to two-bit errors or correct one-bit errors
+    without detection of uncorrected errors. By contrast, the simple
+    parity code cannot correct errors, and can detect only an odd number
+    of bits in error. Hamming codes are perfect codes, that is, they
+    achieve the highest possible rate for codes with their block length
     and minimum distance of three.
 
     * the implemented code consists of:
@@ -20,15 +19,15 @@
             * return the encoded message
         * a function responsible for decoding the message (receptorConverter)
             * return the decoded message and a ack of data integrity
-    
+
     * how to use:
-            to be used you must declare how many parity bits (sizePari) 
+            to be used you must declare how many parity bits (sizePari)
         you want to include in the message.
             it is desired (for test purposes) to select a bit to be set
         as an error. This serves to check whether the code is working correctly.
-            Lastly, the variable of the message/word that must be desired to be 
+            Lastly, the variable of the message/word that must be desired to be
         encoded (text).
-    
+
     * how this work:
             declaration of variables (sizePari, be, text)
 
@@ -47,6 +46,7 @@
 
 # Imports
 import numpy as np
+
 
 # Functions of binary conversion--------------------------------------
 def text_to_bits(text, encoding="utf-8", errors="surrogatepass"):
@@ -72,7 +72,7 @@ def emitterConverter(sizePar, data):
     """
     :param sizePar: how many parity bits the message must have
     :param data:  information bits
-    :return: message to be transmitted by unreliable medium 
+    :return: message to be transmitted by unreliable medium
             - bits of information merged with parity bits
 
     >>> emitterConverter(4, "101010111111")
@@ -85,7 +85,6 @@ def emitterConverter(sizePar, data):
     dataOut = []
     parity = []
     binPos = [bin(x)[2:] for x in range(1, sizePar + len(data) + 1)]
-    pos = [x for x in range(1, sizePar + len(data) + 1)]
 
     # sorted information data for the size of the output data
     dataOrd = []
@@ -100,7 +99,7 @@ def emitterConverter(sizePar, data):
         # Performs a template of bit positions - who should be given,
         # and who should be parity
         if qtdBP < sizePar:
-            if ((np.log(x) / np.log(2))).is_integer():
+            if (np.log(x) / np.log(2)).is_integer():
                 dataOutGab.append("P")
                 qtdBP = qtdBP + 1
             else:
@@ -123,26 +122,23 @@ def emitterConverter(sizePar, data):
         # counter to control the loop reading
         contLoop = 0
         for x in dataOrd:
-            if x != None:
+            if x is not None:
                 try:
                     aux = (binPos[contLoop])[-1 * (bp)]
-                except:
+                except IndexError:
                     aux = "0"
                 if aux == "1":
                     if x == "1":
                         contBO += 1
             contLoop += 1
-        if contBO % 2 == 0:
-            parity.append(0)
-        else:
-            parity.append(1)
+        parity.append(contBO % 2)
 
         qtdBP += 1
 
     # Mount the message
     ContBP = 0  # parity bit counter
     for x in range(0, sizePar + len(data)):
-        if dataOrd[x] == None:
+        if dataOrd[x] is None:
             dataOut.append(str(parity[ContBP]))
             ContBP += 1
         else:
@@ -169,12 +165,9 @@ def receptorConverter(sizePar, data):
     for x in range(1, len(data) + 1):
         # Performs a template of bit positions - who should be given,
         #  and who should be parity
-        if qtdBP < sizePar:
-            if ((np.log(x) / np.log(2))).is_integer():
-                dataOutGab.append("P")
-                qtdBP = qtdBP + 1
-            else:
-                dataOutGab.append("D")
+        if qtdBP < sizePar and (np.log(x) / np.log(2)).is_integer():
+            dataOutGab.append("P")
+            qtdBP = qtdBP + 1
         else:
             dataOutGab.append("D")
 
@@ -189,7 +182,6 @@ def receptorConverter(sizePar, data):
     dataOut = []
     parity = []
     binPos = [bin(x)[2:] for x in range(1, sizePar + len(dataOutput) + 1)]
-    pos = [x for x in range(1, sizePar + len(dataOutput) + 1)]
 
     #  sorted information data for the size of the output data
     dataOrd = []
@@ -203,12 +195,9 @@ def receptorConverter(sizePar, data):
     for x in range(1, sizePar + len(dataOutput) + 1):
         # Performs a template position of bits - who should be given,
         # and who should be parity
-        if qtdBP < sizePar:
-            if ((np.log(x) / np.log(2))).is_integer():
-                dataOutGab.append("P")
-                qtdBP = qtdBP + 1
-            else:
-                dataOutGab.append("D")
+        if qtdBP < sizePar and (np.log(x) / np.log(2)).is_integer():
+            dataOutGab.append("P")
+            qtdBP = qtdBP + 1
         else:
             dataOutGab.append("D")
 
@@ -227,36 +216,28 @@ def receptorConverter(sizePar, data):
         # Counter to control loop reading
         contLoop = 0
         for x in dataOrd:
-            if x != None:
+            if x is not None:
                 try:
                     aux = (binPos[contLoop])[-1 * (bp)]
-                except:
+                except IndexError:
                     aux = "0"
-                if aux == "1":
-                    if x == "1":
-                        contBO += 1
+                if aux == "1" and x == "1":
+                    contBO += 1
             contLoop += 1
-        if contBO % 2 == 0:
-            parity.append("0")
-        else:
-            parity.append("1")
+        parity.append(str(contBO % 2))
 
         qtdBP += 1
 
     # Mount the message
     ContBP = 0  # Parity bit counter
     for x in range(0, sizePar + len(dataOutput)):
-        if dataOrd[x] == None:
+        if dataOrd[x] is None:
             dataOut.append(str(parity[ContBP]))
             ContBP += 1
         else:
             dataOut.append(dataOrd[x])
 
-    if parityReceived == parity:
-        ack = True
-    else:
-        ack = False
-
+    ack = parityReceived == parity
     return dataOutput, ack
 
 

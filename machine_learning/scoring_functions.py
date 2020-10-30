@@ -10,9 +10,10 @@ import numpy as np
     even log is used.
 
     Using log and roots can be perceived as tools for penalizing big
-    erors. However, using appropriate metrics depends on the situations,
+    errors. However, using appropriate metrics depends on the situations,
     and types of data
 """
+
 
 # Mean Absolute Error
 def mae(predict, actual):
@@ -134,3 +135,7 @@ def mbd(predict, actual):
     score = float(numerator) / denumerator * 100
 
     return score
+
+
+def manual_accuracy(predict, actual):
+    return np.mean(np.array(actual) == np.array(predict))

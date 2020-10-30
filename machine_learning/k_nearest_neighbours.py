@@ -1,5 +1,6 @@
-import numpy as np
 from collections import Counter
+
+import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
@@ -47,7 +48,7 @@ def classifier(train_data, train_target, classes, point, k=5):
         distances.append((distance, data_point[1]))
     # Choosing 'k' points with the least distances.
     votes = [i[1] for i in sorted(distances)[:k]]
-    # Most commonly occuring class among them
+    # Most commonly occurring class among them
     # is the class into which the point is classified
     result = Counter(votes).most_common(1)[0][0]
     return classes[result]
